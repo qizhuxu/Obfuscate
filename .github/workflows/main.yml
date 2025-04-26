@@ -1,0 +1,52 @@
+name: Obfuscate 源码
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  #schedule:
+    #- cron: "0 1 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+
+      - name: Install javascript-obfuscator 🎮 安装工具
+        run: |
+          npm install -g javascript-obfuscator
+
+      - name: Download source file 🚀 下载源码
+        run: |
+          wget -O source.js https://raw.githubusercontent.com/qizhuxu/source-js/refs/heads/main/p.js
+
+      - name: Obfuscate JavaScript 🎭 开始混淆
+        run: |
+          javascript-obfuscator source.js --output _worker.js \
+            --compact true \
+            --identifier-names-generator hexadecimal \
+            --rename-globals true \
+            --string-array true \
+            --string-array-threshold 0.75 \
+            --transform-object-keys true \
+            --simplify true
+
+      - name: Commit obfuscated file ✨ 更新提交
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: main
+          commit_message: '✅ Update obfuscated 源码: ${{ github.event.repository.updated_at }}'
+          commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
+          file_pattern: '_worker.js'
