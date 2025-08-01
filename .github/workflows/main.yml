@@ -30,7 +30,7 @@ jobs:
 
       - name: Download source file 🚀 下载源码
         run: |
-          wget -O source.js https://raw.githubusercontent.com/qizhuxu/source-js/refs/heads/main/k.js
+          wget -O source.js https://raw.githubusercontent.com/qizhuxu/source-js/refs/heads/main/yn.js
 
       - name: Obfuscate JavaScript 🎭 开始混淆
         run: |
